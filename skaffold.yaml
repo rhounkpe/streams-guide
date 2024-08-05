@@ -1,0 +1,28 @@
+---
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: streams-guide
+build:
+  artifacts:
+    - image: streams-guide
+      sync:
+        auto: true
+      jib:
+        args:
+          - -DsendCredentialsOverHttp=true
+  local:
+    push: false
+    useDockerCLI: true
+
+deploy:
+  helm:
+    releases:
+      - name: streams-guide
+        chartPath: helm/streams-guide
+        valuesFiles:
+          - helm/streams-guide/values.yaml
+        skipBuildDependencies: true
+#manifests:
+#  rawYaml:
+#    - OLD_deployment_OLD.yaml
